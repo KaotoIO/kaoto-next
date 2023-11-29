@@ -23,6 +23,7 @@ import { IVisualizationNode } from '../../../models/visualization/base-visual-en
 import { CustomNodeWithSelection } from '../Custom/CustomNode';
 import { CanvasDefaults } from './canvas.defaults';
 import { CanvasEdge, CanvasNode, CanvasNodesAndEdges, LayoutType } from './canvas.models';
+import { StyleGroup } from '../Custom/CustomGroup';
 
 export class CanvasService {
   static nodes: CanvasNode[] = [];
@@ -50,7 +51,7 @@ export class CanvasService {
   static baselineComponentFactory(kind: ModelKind, type: string): ReturnType<ComponentFactory> {
     switch (type) {
       case 'group':
-        return DefaultGroup;
+        return StyleGroup as any;
       default:
         switch (kind) {
           case ModelKind.graph:
@@ -137,6 +138,9 @@ export class CanvasService {
     this.visitedNodes = [];
     this.appendNodesAndEdges(vizNode);
 
+    const group = this.getContainer('group', { label: vizNode.getBaseEntity()?.getId(), children: this.visitedNodes });
+    this.nodes.push(group);
+
     return { nodes: this.nodes, edges: this.edges };
   }
 
@@ -221,6 +225,19 @@ export class CanvasService {
       width: CanvasDefaults.DEFAULT_NODE_DIAMETER,
       height: CanvasDefaults.DEFAULT_NODE_DIAMETER,
       shape: CanvasDefaults.DEFAULT_NODE_SHAPE,
+    };
+  }
+
+  private static getContainer(id: string, options: { label?: string; children?: string[] } = {}): CanvasNode {
+    return {
+      id,
+      type: 'group',
+      group: true,
+      label: options.label ?? id,
+      children: options.children ?? [],
+      style: {
+        padding: 80,
+      },
     };
   }
 
