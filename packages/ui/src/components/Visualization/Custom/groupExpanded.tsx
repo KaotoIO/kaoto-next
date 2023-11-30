@@ -206,6 +206,7 @@ const BaseGroupExpandedComponent: React.FunctionComponent<BaseGroupExpandedProps
     dragging && 'pf-m-dragging',
     selected && 'pf-m-selected',
   );
+
   const innerGroupClassName = css(
     styles.topologyGroup,
     className,
