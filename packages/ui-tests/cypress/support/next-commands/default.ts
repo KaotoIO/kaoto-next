@@ -1,16 +1,20 @@
 Cypress.Commands.add('openHomePage', () => {
   const url = Cypress.config().baseUrl;
   cy.visit(url!);
+  cy.waitSchemasLoading();
+
+  cy.get('[data-testid="visualization-empty-state"]').should('exist');
+  // Wait for the element to become visible
+  cy.get('[data-testid="visualization-empty-state"]').should('be.visible');
+});
+
+Cypress.Commands.add('waitSchemasLoading', () => {
   // Wait for the loading schemas to disappear
   cy.get('[data-testid="loading-schemas"]').should('be.visible');
   cy.get('[data-testid="loading-schemas"]').should('not.exist');
   // Wait for the loading connectors to disappear
   cy.get('[data-testid="loading-catalogs"]').should('be.visible');
   cy.get('[data-testid="loading-catalogs"]').should('not.exist');
-
-  cy.get('[data-testid="visualization-empty-state"]').should('exist');
-  // Wait for the element to become visible
-  cy.get('[data-testid="visualization-empty-state"]').should('be.visible');
 });
 
 Cypress.Commands.add('expandVisualization', () => {
@@ -42,6 +46,11 @@ Cypress.Commands.add('openBeans', () => {
 Cypress.Commands.add('openMetadata', () => {
   cy.get('[data-testid="Metadata"]').click();
   cy.get('[data-testid="metadata-editor-form-Metadata"]').should('be.visible');
+});
+
+Cypress.Commands.add('openSettings', () => {
+  cy.get('[data-testid="Settings"]').click();
+  cy.get('[data-testid="settings-form"]').should('be.visible');
 });
 
 Cypress.Commands.add('openPipeErrorHandler', () => {
